@@ -16,8 +16,8 @@ export default function ROSIReport() {
 
   return (
     <main className="min-h-screen report-document">
-      {/* Report Header with logo (print-friendly) */}
-      <div className="report-header bg-white text-black border-b border-gray-300">
+      {/* Print-only report header with logo (screen already has site header) */}
+      <div className="hidden print:block report-header bg-white text-black border-b border-gray-300">
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/images/logomarca_transp-red.png" alt="Pereira & Pelizzari" className="h-32 w-auto" />
@@ -52,11 +52,14 @@ export default function ROSIReport() {
           </div>
         </div>
       </section>
+      <div className="page-break" />
 
       {/* Summary + Charts */}
       <section className="container mx-auto px-6 pb-16">
         <ROSIResults />
-        <div className="page-break" />
+      </section>
+      <div className="page-break" />
+      <section className="container mx-auto px-6 pb-16">
         <ROSICharts />
       </section>
 

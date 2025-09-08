@@ -5,6 +5,7 @@ import Section from '@/components/ui/Section'
 import { useROSIStore } from '@/store/rosi'
 import { formatCurrencyBRL } from '@/lib/format'
 import Chart from 'chart.js/auto'
+import { calculateROSI } from '@/lib/rosi/calc'
 
 export default function ROSICharts() {
   const { currentResult } = useROSIStore()
@@ -13,16 +14,17 @@ export default function ROSICharts() {
   const doughnutRef = useRef<HTMLCanvasElement | null>(null)
 
   const sensitivity = useMemo(() => {
-    if (!currentResult) return [] as { rr: number; roi: number | 'infinite' }[]
-    const pts: { rr: number; roi: number | 'infinite' }[] = []
-    for (let rr = 0; rr <= 100; rr += 5) {
-      const avoided = currentResult.avoidedLoss / (currentResult.riskMitigationScore ? (currentResult.riskMitigationScore / 100) : 1)
-      const inv = avoided - currentResult.annualizedSavings
-      const annual = (avoided * (rr / 100)) - inv
-      const roi = inv === 0 ? (annual > 0 ? 'infinite' : 0) : (annual / inv) * 100
-      pts.push({ rr, roi })
-    }
-    return pts
+    // Sample the ROI curve by varying only the reduction percentage
+    const samples = Array.from({ length: 21 }, (_, i) => i * 5) // 0..100 step 5
+    return samples.map((rr) => {
+      const r = calculateROSI({
+        initialInvestment: Math.max(0, (currentResult?.avoidedLoss || 0) - (currentResult?.annualizedSavings || 0)),
+        potentialLoss: Math.max(0, (currentResult?.avoidedLoss || 0) / Math.max(1, (currentResult?.riskMitigationScore || 1) / 100)),
+        riskReductionPercentage: rr,
+      }).roiPercentage
+      const y = typeof r === 'number' ? r : 300 // cap infinite for visualization
+      return { x: rr, y }
+    })
   }, [currentResult])
 
   useEffect(() => {
@@ -42,14 +44,24 @@ export default function ROSICharts() {
               currentResult.avoidedLoss,
               currentResult.annualizedSavings
             ],
-            backgroundColor: ['#EB33CC55', '#EB33CC88', '#EB33CCBB'],
+            backgroundColor: ['#EB33CC44', '#EB33CC88', '#EB33CCcc'],
             borderColor: '#EB33CC',
+            borderWidth: 1,
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: true,
+              callbacks: { label: (ctx) => `${ctx.label}: ${formatCurrencyBRL(Number(ctx.parsed.y))}` },
+            },
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.08)' } },
+            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.08)' } },
+          }
         }
       }))
     }
@@ -59,19 +71,28 @@ export default function ROSICharts() {
       charts.push(new Chart(lineRef.current, {
         type: 'line',
         data: {
-          labels: pts.map(p => `${p.rr}%`),
+          labels: pts.map(p => `${p.x}%`),
           datasets: [{
-            label: 'ROI %',
-            data: pts.map(p => (p.roi === 'infinite' ? 200 : Number(p.roi))),
+            label: 'ROI (%)',
+            data: pts.map(p => p.y),
             borderColor: '#EB33CC',
-            backgroundColor: '#EB33CC55',
-            tension: 0.2,
+            backgroundColor: 'rgba(235, 51, 204, 0.15)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            borderWidth: 2,
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true, callbacks: { label: (ctx) => `ROI: ${Number(ctx.parsed.y).toFixed(0)}%` } },
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.08)' } },
+            y: { beginAtZero: true, suggestedMax: 300, grid: { color: 'rgba(255,255,255,0.08)' } },
+          }
         }
       }))
     }
