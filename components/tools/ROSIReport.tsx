@@ -20,7 +20,7 @@ export default function ROSIReport() {
       <div className="report-header bg-white text-black border-b border-gray-300">
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/images/logomarca_transp-red.png" alt="Pereira & Pelizzari" className="h-8 w-auto" />
+            <img src="/images/logomarca_transp-red.png" alt="Pereira & Pelizzari" className="h-32 w-auto" />
             <div className="text-sm">Relatório de ROSI</div>
           </div>
           <div className="text-xs">{new Date().toLocaleDateString('pt-BR')}</div>
@@ -76,4 +76,3 @@ export default function ROSIReport() {
     </main>
   )
 }
-

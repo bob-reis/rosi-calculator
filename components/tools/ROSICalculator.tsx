@@ -29,10 +29,9 @@ export default function ROSICalculator() {
       <div className="mt-6 card-cyber p-6 rounded text-center">
         <p className="mb-3 font-semibold">Quer conhecer a empresa que tem o melhor ROSI do mercado? Entre em contato</p>
         <a className="btn-cyber px-6 py-2 inline-block rounded" href="https://www.pereirapelizzari.tech/contato" target="_blank" rel="noopener noreferrer">
-          Falar com a Pereira & Pelizzari
+          Falar com a PP_Tech
         </a>
       </div>
     </div>
   )
 }
-
