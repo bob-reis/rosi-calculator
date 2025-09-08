@@ -83,14 +83,14 @@ export default function ROSICharts() {
           labels: ['Mitigação', 'Risco remanescente'],
           datasets: [{
             data: [currentResult.riskMitigationScore, 100 - currentResult.riskMitigationScore],
-            backgroundColor: ['#EB33CC', '#6b7280'],
-            cutout: '70%'
+            backgroundColor: ['#EB33CC', '#6b7280']
           }]
         },
         options: {
           plugins: { legend: { display: false } },
           rotation: -90,
           circumference: 360,
+          cutout: '70%'
         }
       }))
     }
