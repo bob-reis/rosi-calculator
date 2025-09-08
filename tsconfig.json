@@ -20,7 +20,7 @@
       "@/store/*": ["./store/*"],
       "@/types/*": ["./types/*"]
     },
-    "types": []
+    "types": ["node"]
   },
   "include": [
     "next-env.d.ts",
@@ -30,4 +30,3 @@
   ],
   "exclude": ["node_modules"]
 }
-
