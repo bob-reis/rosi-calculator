@@ -1,0 +1,23 @@
+# Ignore extracted reference site and local guide
+/Referencia/
+/AGENTS.md
+
+# Node
+node_modules/
+.next/
+coverage/
+dist/
+out/
+
+# Env and logs
+.env*
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor/OS
+.DS_Store
+*.swp
+*.swo
+*.tmp
+Thumbs.db

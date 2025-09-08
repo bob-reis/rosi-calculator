@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #EB33CC;
+  --secondary: #0066cc;
+  --accent: #ff6b35;
+  --dark: #0d1117;
+  --darker: #010409;
+  --text-light: #f0f6fc;
+  --text-muted: #8b949e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-light);
+  overflow-x: hidden;
+}
+
+/* Buttons */
+.btn-cyber {
+  position: relative;
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 12px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.btn-cyber::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(235, 51, 204, 0.2), transparent);
+  transition: left 0.5s;
+}
+.btn-cyber:hover::before { left: 100%; }
+.btn-cyber:hover { background: rgba(235, 51, 204, 0.1); box-shadow: 0 0 20px var(--primary); transform: translateY(-2px); }
+
+/* Cards */
+.card-cyber { background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(235, 51, 204, 0.35); backdrop-filter: blur(10px); transition: all 0.3s ease; }
+.card-cyber:hover { border-color: var(--primary); box-shadow: 0 0 18px rgba(235, 51, 204, 0.2), 0 8px 20px rgba(0,0,0,0.35); transform: translateY(-3px); }
+
+/* Print styles for PDF export */
+@media print {
+  body { background: #ffffff !important; color: #000000 !important; }
+  header, nav, .print\:hidden { display: none !important; }
+  .report-header, .report-footer { position: fixed; left: 0; right: 0; background: #ffffff !important; color: #000000 !important; border-color: #cccccc !important; z-index: 9999; }
+  .report-header { top: 0; }
+  .report-footer { bottom: 0; }
+  .report-document { padding-top: 90px; padding-bottom: 80px; }
+  .card-cyber { background: #ffffff !important; border: 1px solid #ccc !important; box-shadow: none !important; }
+  a { color: #000000 !important; text-decoration: none !important; }
+  .page-break { page-break-before: always; }
+}
+
